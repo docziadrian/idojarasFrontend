@@ -1,0 +1,128 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-info text-white">
+          <h3 class="mb-0">
+            <i class="bi bi-cloud-upload me-2"></i>
+            Időjárás adatok felvétele
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          <form id="weatherForm">
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label for="selectedDate" class="form-label">
+                  <i class="bi bi-calendar-date me-1"></i>
+                  Dátum
+                </label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="selectedDate"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="ilyenIdoLesz" class="form-label">
+                  <i class="bi bi-cloud me-1"></i>
+                  Időjárás típusa
+                </label>
+                <select id="ilyenIdoLesz" class="form-select" required>
+                  <option value="1" selected>Napos idő</option>
+                  <option value="2">Felhős idő</option>
+                  <option value="3">Esős idő</option>
+                  <option value="4">Nagyon esős idő</option>
+                  <option value="5">Havazás</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label for="minHom" class="form-label">
+                  <i class="bi bi-thermometer-half me-1"></i>
+                  Minimum hőmérséklet (°C)
+                </label>
+                <input
+                  id="minHom"
+                  type="number"
+                  class="form-control"
+                  min="-50"
+                  max="50"
+                  placeholder="Pl. 15"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="maxHom" class="form-label">
+                  <i class="bi bi-thermometer-high me-1"></i>
+                  Maximum hőmérséklet (°C)
+                </label>
+                <input
+                  id="maxHom"
+                  type="number"
+                  class="form-control"
+                  min="-50"
+                  max="50"
+                  placeholder="Pl. 25"
+                  required
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-warning text-dark">
+          <h4 class="mb-0">
+            <i class="bi bi-eye me-2"></i>
+            Előnézet
+          </h4>
+        </div>
+        <div class="card-body text-center">
+          <img
+            id="cardImgPath"
+            src="https://cdn-icons-png.flaticon.com/512/4814/4814268.png"
+            class="img-fluid mb-3"
+            alt="Időjárás ikon"
+            style="max-height: 120px"
+          />
+          <h5 class="card-title" id="cardTitle">Napos idő</h5>
+          <p class="card-text" id="cardDescription">Fényes napra virradunk</p>
+
+          <div class="row text-center mb-3">
+            <div class="col-6">
+              <div class="border rounded p-2 bg-light">
+                <small class="text-black d-block">Minimum</small>
+                <span class="fw-bold text-primary" id="cardMin">--°C</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="border rounded p-2 bg-light">
+                <small class="text-black d-block">Maximum</small>
+                <span class="fw-bold text-danger" id="cardMax">--°C</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onclick="handleSubmit()"
+            type="button"
+            class="btn btn-success btn-lg w-100"
+          >
+            <i class="bi bi-save me-2"></i>
+            Adatok mentése
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h5
+  class="position-absolute top-50 start-50 text-center translate-middle"
+  id="myAlert"
+></h5>
