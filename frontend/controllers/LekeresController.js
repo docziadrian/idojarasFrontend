@@ -204,12 +204,41 @@ window.calendarView = () => {
     },
   });
 
+  // Add multiple events
   weatherData.forEach((weather) => {
     calendar.addEvent({
       title: weather.sendTitle,
       start: weather.sendDate,
       end: weather.sendDate,
       backgroundColor: getWeatherColor(weather.sendTitle),
+      borderColor: getWeatherColor(weather.sendTitle),
+      wall: true,
+      allDay: true,
+      display: "background",
+
+      editable: false,
+      durationEditable: false,
+      startEditable: false,
+      overlap: false,
+      constraint: "businessHours",
+      businessHours: true,
+      classNames: [
+        " font-weight-bold h5 text-center text-dark  " +
+          getWeatherColor(weather.sendTitle).replace("#", ""),
+      ],
+    });
+    calendar.addEvent({
+      title: "Max " + weather.sendMax + " °C",
+      start: weather.sendDate,
+      end: weather.sendDate,
+      backgroundColor: "red",
+      borderColor: getWeatherColor(weather.sendTitle),
+    });
+    calendar.addEvent({
+      title: "Min " + weather.sendMin + " °C",
+      start: weather.sendDate,
+      end: weather.sendDate,
+      backgroundColor: "green",
       borderColor: getWeatherColor(weather.sendTitle),
     });
   });
@@ -219,16 +248,31 @@ window.calendarView = () => {
 
 window.getWeatherColor = (title) => {
   const colors = {
-    "Napos idő lesz": "#ffc107",
-    "Felhős idő lesz": "#6c757d",
-    "Esős idő lesz": "#0d6efd",
-    "Nagyon esős idő lesz": "#0d6efd",
-    "Havazni fog": "#ffffff",
+    "Napos idő lesz": "#fdffc9",
+    "Felhős idő lesz": "#eaebdf",
+    "Esős idő lesz": "#c7f1ff",
+    "Nagyon esős idő lesz": "#a1e7ff",
+    "Havazni fog": "#dae6eb",
   };
   return colors[title] || "#6c757d";
 };
 
+window.watchThemeChange = () => {
+  const observer = new MutationObserver(() => {
+    linearView();
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-bs-theme"],
+  });
+};
+
+watchThemeChange();
+
 window.linearView = () => {
+  const isDark =
+    document.documentElement.getAttribute("data-bs-theme") === "dark";
+
   const dataPoints = weatherData.map((weather) => ({
     label: weather.sendDate,
     y: [Number(weather.sendMin), Number(weather.sendMax)],
@@ -236,9 +280,14 @@ window.linearView = () => {
   }));
 
   const chart = new CanvasJS.Chart("chartContainer", {
+    theme: isDark ? "dark2" : "light2",
+
+    animationEnabled: true,
     title: {
       text: "Időjárásjelentés",
       fontFamily: "Arial",
+
+      fontSize: 24,
     },
     axisY: {
       suffix: " °C",
@@ -246,13 +295,18 @@ window.linearView = () => {
       minimum: -10,
       gridThickness: 1,
       gridColor: "#e0e0e0",
+      title: "Hőmérséklet",
     },
     axisX: {
-      title: "Dátum",
+      title: "",
       titleFontSize: 14,
+
+      interval: 1,
+      labelAngle: -45,
     },
     toolTip: {
       shared: true,
+
       content:
         "{name} <br/> <strong>Hőmérséklet:</strong> <br/> Min: {y[0]} °C, Max: {y[1]} °C",
     },
@@ -260,7 +314,7 @@ window.linearView = () => {
       {
         type: "rangeSplineArea",
         fillOpacity: 0.3,
-        color: "#0d6efd",
+        color: "blue",
         indexLabelFormatter: formatter,
         dataPoints: dataPoints,
       },
@@ -279,7 +333,7 @@ window.addWeatherIcons = (chart) => {
     if (weather) {
       const img = $("<img>")
         .attr("src", weather.sendImgPath)
-        .attr("class", `weather-icon-${index}`)
+        .attr("class", `weather-icon-${index} `)
         .css({
           width: "30px",
           height: "30px",
